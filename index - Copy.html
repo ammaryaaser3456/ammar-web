@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>أنجزها الآن</title>
+  <style>
+    body {
+      direction: rtl;
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
+
+    input {
+      padding: 10px;
+      width: 60%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background-color: #ffffff;
+      padding: 10px;
+      margin: 8px auto;
+      width: 80%;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ أنجزها الآن</h1>
+  <p>سجل مهامك اليومية وابدأ بتنفيذها الآن!</p>
+
+  <input type="text" id="taskInput" placeholder="أدخل المهمة هنا">
+  <button onclick="addTask()">إضافة</button>
+
+  <h2>📋 قائمة المهام</h2>
+  <ul id="taskList"></ul>
+
+  <script>
+    // عند تحميل الصفحة، نعرض المهام المخزنة
+    window.onload = function() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks.forEach(task => createTaskElement(task));
+    };
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const taskText = input.value.trim();
+      if (taskText === "") return;
+
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks.push(taskText);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+
+      createTaskElement(taskText);
+      input.value = "";
+    }
+
+    function createTaskElement(text) {
+      const li = document.createElement("li");
+
+      const span = document.createElement("span");
+      span.textContent = text;
+
+      const button = document.createElement("button");
+      button.textContent = "حذف";
+      button.className = "delete-btn";
+      button.onclick = function () {
+        deleteTask(button, text);
+      };
+
+      li.appendChild(span);
+      li.appendChild(button);
+      document.getElementById("taskList").appendChild(li);
+    }
+
+    function deleteTask(button, taskText) {
+      button.parentElement.remove();
+
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      tasks = tasks.filter(task => task !== taskText);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  </script>
+
+</body>
+</html>
